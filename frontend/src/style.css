@@ -1,0 +1,211 @@
+:root {
+  --bg-base: #080c14;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #111b2d 0%, #080c14 100%);
+  --bg-surface: rgba(17, 25, 40, 0.6);
+  --bg-surface-solid: #111b2d;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-hover: rgba(0, 242, 254, 0.3);
+  
+  --text-primary: #ffffff;
+  --text-secondary: #8c9ba5;
+  --text-muted: #52636f;
+  
+  --color-cyan: #00f2fe;
+  --color-purple: #9b51e0;
+  --color-accent: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  --color-accent-purple: linear-gradient(135deg, #9b51e0 0%, #7000ff 100%);
+  
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  
+  --font-heading: 'Noto Kufi Arabic Variable', sans-serif;
+  --font-body: 'Noto Kufi Arabic Variable', sans-serif;
+  
+  --shadow-glow: 0 0 20px rgba(0, 242, 254, 0.15);
+  --shadow-glow-purple: 0 0 20px rgba(155, 81, 224, 0.15);
+  
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-base);
+  background-image: var(--bg-gradient);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+#app {
+  height: 100%;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Glassmorphism base utility */
+.glass-panel {
+  background: var(--bg-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: var(--transition-smooth);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Radar Scan Keyframes */
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.radar-wave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  margin-top: -60px;
+  margin-left: -60px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-cyan);
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.radar-wave-1 {
+  animation: radar-pulse 3s linear infinite;
+}
+
+.radar-wave-2 {
+  animation: radar-pulse 3s linear infinite;
+  animation-delay: 1s;
+}
+
+.radar-wave-3 {
+  animation: radar-pulse 3s linear infinite;
+  animation-delay: 2s;
+}
+
+/* Card Glow Hover effects */
+.glow-card-cyan:hover {
+  box-shadow: var(--shadow-glow);
+  border-color: var(--border-color-hover);
+  transform: translateY(-3px);
+}
+
+.glow-card-purple:hover {
+  box-shadow: var(--shadow-glow-purple);
+  border-color: rgba(155, 81, 224, 0.3);
+  transform: translateY(-3px);
+}
+
+/* Text Gradients */
+.text-gradient-cyan {
+  background: var(--color-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-purple {
+  background: var(--color-accent-purple);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Progress bar customizations */
+.el-progress-bar__outer {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 100px !important;
+}
+
+.el-progress-bar__inner {
+  border-radius: 100px !important;
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
+}
+
+/* Element Plus Custom Overrides */
+.el-dialog {
+  background: rgba(13, 20, 34, 0.9) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+.el-dialog__title {
+  color: var(--text-primary) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 600 !important;
+}
+
+.el-dialog__body {
+  color: var(--text-secondary) !important;
+}
+
+.el-button--primary {
+  background: var(--color-accent) !important;
+  border: none !important;
+  font-weight: 500 !important;
+  transition: var(--transition-smooth) !important;
+}
+
+.el-button--primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+}
+
+.el-button--default {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.el-button--default:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}

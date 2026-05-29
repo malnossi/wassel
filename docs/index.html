@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="واصل (Wassel) - تطبيق مجاني ومفتوح المصدر لمشاركة الملفات بسرعة فائقة وأمان مطلق عبر الشبكة المحلية (LAN) دون الحاجة للإنترنت.">
+    <title>واصل - مشاركة فائقة السرعة للملفات عبر الشبكة المحلية</title>
+    
+    <!-- Google Fonts: Readex Pro (Arabic) & Inter (Numbers/Latin) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Readex+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Inline Premium Stylesheet for Single-File Portability -->
+    <style>
+        :root {
+            --bg-void: #070a13;
+            --bg-glass: rgba(13, 20, 38, 0.45);
+            --border-glass: rgba(255, 255, 255, 0.05);
+            --border-glass-hover: rgba(0, 242, 254, 0.25);
+            
+            --color-cyan: #00f2fe;
+            --color-purple: #9b51e0;
+            --color-success: #10b981;
+            
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            
+            --font-main: 'Readex Pro', 'Inter', system-ui, -apple-system, sans-serif;
+            --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-void);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Ambient Glow Gradients */
+        .ambient-glow {
+            position: absolute;
+            width: 50vw;
+            height: 50vw;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        .glow-cyan {
+            top: -10vw;
+            right: -10vw;
+            background: var(--color-cyan);
+        }
+        .glow-purple {
+            bottom: -10vw;
+            left: -10vw;
+            background: var(--color-purple);
+        }
+
+        /* Glassmorphic Utilities */
+        .glass-panel {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            transition: var(--transition-smooth);
+        }
+        .glass-panel:hover {
+            border-color: var(--border-glass-hover);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.04);
+        }
+
+        /* Header Navigation */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 8%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            font-size: 20px;
+            font-weight: 700;
+            color: #070a13;
+        }
+
+        .brand h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .brand-accent {
+            color: var(--color-cyan);
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            transition: var(--transition-smooth);
+        }
+
+        .nav-links a:hover {
+            color: var(--color-cyan);
+        }
+
+        .github-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary) !important;
+            padding: 8px 18px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .github-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--color-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+        }
+
+        /* Hero Showcase */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 8% 100px;
+            gap: 60px;
+            position: relative;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .version-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            color: var(--color-cyan);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 100px;
+            margin-bottom: 24px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .version-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--color-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--color-cyan);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero-content h2 {
+            font-size: 46px;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .hero-content h2 span {
+            background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-cyan), #00b8fe);
+            color: #070a13;
+            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 25px rgba(0, 242, 254, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            width: 480px;
+            height: 480px;
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 242, 254, 0.1);
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition-smooth);
+        }
+        
+        .hero-image img:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(0, 242, 254, 0.2);
+            border-color: var(--border-glass-hover);
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 60px;
+        }
+
+        .section-title h3 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            color: var(--color-cyan);
+            font-size: 24px;
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            background: rgba(155, 81, 224, 0.08);
+            border-color: rgba(155, 81, 224, 0.15);
+            color: var(--color-purple);
+        }
+
+        .feature-card:nth-child(3) .feature-icon {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.15);
+            color: var(--color-success);
+        }
+
+        .feature-card h4 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Download Section */
+        .downloads {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 8% 120px;
+            position: relative;
+        }
+
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .download-card {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-cyan), transparent);
+        }
+
+        .download-card.card-purple::before {
+            background: linear-gradient(90deg, var(--color-purple), transparent);
+        }
+
+        .os-icon {
+            font-size: 48px;
+            color: var(--text-primary);
+        }
+
+        .download-card h4 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .download-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            max-width: 280px;
+        }
+
+        .download-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .download-meta span strong {
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-glass);
+            padding: 40px 8%;
+            background: rgba(4, 6, 13, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-content p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Icons mockup SVG */
+        .icon-svg {
+            width: 1em;
+            height: 1em;
+            fill: currentColor;
+        }
+
+        /* Responsive Layouts */
+        @media (max-width: 968px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-bottom: 60px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-image img {
+                width: 380px;
+                height: 380px;
+            }
+
+            .navbar {
+                padding: 20px 5%;
+            }
+
+            .downloads-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .download-card {
+                padding: 36px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Gradients -->
+    <div class="ambient-glow glow-cyan"></div>
+    <div class="ambient-glow glow-purple"></div>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <a href="#" class="brand">
+            <div class="brand-logo">و</div>
+            <h1>وا<span class="brand-accent">صل</span></h1>
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="#features">المميزات</a></li>
+            <li><a href="#download">التنزيل</a></li>
+            <li>
+                <a href="https://github.com/malnossi/wassel" target="_blank" class="github-btn">
+                    <svg class="icon-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    <span>كود المصدر</span>
+                </a>
+            </li>
+        </ul>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="version-tag">
+                <span class="version-dot"></span>
+                <span id="app-version">جاري تحميل الإصدار...</span>
+            </div>
+            <h2>شارك ملفاتك بلا قيود وبسرعة <span>فائقة</span></h2>
+            <p>
+                <strong>واصل (Wassel)</strong> هو تطبيق سطح مكتب مجاني ومفتوح المصدر، يتيح لك إرسال واستقبال الملفات والمجلدات بين أجهزتك المختلفة على نفس الشبكة المحلية بسرعة البرق وأمان تام، ودون الحاجة لاتصال بالإنترنت مطلقاً.
+            </p>
+            <div class="hero-actions">
+                <a href="#download" class="btn btn-primary">تحميل التطبيق الآن</a>
+                <a href="#features" class="btn btn-secondary">استكشف المزايا</a>
+            </div>
+        </div>
+        
+        <div class="hero-image">
+            <img src="hero.png" alt="واصل - واجهة التطبيق الذكية لتبادل الملفات">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-title">
+            <h3>لماذا تختار واصل؟</h3>
+            <p>صُمم التطبيق ليوفر تجربة نقل سريعة وخاصة دون أي تعقيد أو إعلانات.</p>
+        </div>
+        
+        <div class="features-grid">
+            <!-- Feature 1 -->
+            <div class="feature-card glass-panel">
+                <div class="feature-icon">
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <h4>أمان وخصوصية تامة</h4>
+                <p>تنتقل ملفاتك بالكامل داخل شبكتك المنزلية أو المكتبية. يتم التحقق من سلامة وصحة الملفات عبر بصمة SHA-256 لمنع أي تلاعب بالبيانات.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="feature-card glass-panel">
+                <div class="feature-icon">
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </div>
+                <h4>سرعة نقل خارقة</h4>
+                <p>لا قيود ولا خنق للسرعة! يستغل واصل كامل سرعة شبكة الواي فاي أو السلك الخاصة بك لنقل الجيجابايتات في ثوانٍ معدودة.</p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="feature-card glass-panel">
+                <div class="feature-icon">
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                </div>
+                <h4>اكتشاف ذكي وتلقائي</h4>
+                <p>بمجرد تشغيل التطبيق، سيكتشف الأجهزة الأخرى تلقائياً بفضل بروتوكول mDNS. وفي حال حظره، يعمل فاحص الشبكة الفرعية كبديل ذكي وفوري.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Downloads Section -->
+    <section class="downloads" id="download">
+        <div class="section-title">
+            <h3>تنزيل واصل</h3>
+            <p>اختر نظام التشغيل الخاص بك وحمل أحدث نسخة مباشرة من إصدارات GitHub الرسمية.</p>
+        </div>
+        
+        <div class="downloads-grid">
+            <!-- macOS Card -->
+            <div class="download-card glass-panel">
+                <div class="os-icon">🍏</div>
+                <h4>واصل لنظام macOS</h4>
+                <p>نسخة شاملة (Universal) تدعم معالجات Apple Silicon (M1/M2/M3) ومعالجات Intel.</p>
+                <a href="https://github.com/malnossi/wassel/releases/latest/download/واصل-macOS.zip" class="btn btn-primary">
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>تحميل لنظام macOS</span>
+                </a>
+                <div class="download-meta">
+                    <span>الصيغة: <strong>ZIP (.app داخل الأرشيف)</strong></span>
+                    <span>النظام: <strong>macOS 10.15 أو أحدث</strong></span>
+                </div>
+            </div>
+            
+            <!-- Windows Card -->
+            <div class="download-card glass-panel card-purple">
+                <div class="os-icon">🪟</div>
+                <h4>واصل لنظام Windows</h4>
+                <p>ملف تنفيذي مستقل 64 بت خفيف وسريع ولا يحتاج لأي تثبيت معقد.</p>
+                <a href="https://github.com/malnossi/wassel/releases/latest/download/واصل-Windows.zip" class="btn btn-primary" style="background: linear-gradient(135deg, var(--color-purple), #b37feb); box-shadow: 0 4px 20px rgba(155, 81, 224, 0.3); color: #fff;">
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>تحميل لنظام Windows</span>
+                </a>
+                <div class="download-meta">
+                    <span>الصيغة: <strong>ZIP (.exe داخل الأرشيف)</strong></span>
+                    <span>النظام: <strong>Windows 10 / 11 (64-bit)</strong></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <a href="#" class="brand">
+                <div class="brand-logo">و</div>
+                <h1>وا<span class="brand-accent">صل</span></h1>
+            </a>
+            <p>حقوق النشر © 2026 واصل. مرخص بموجب رخصة MIT. صُنع بحب في سوريا.</p>
+        </div>
+    </footer>
+
+    <!-- Fetch Latest Tag Script -->
+    <script>
+        async function fetchLatestRelease() {
+            try {
+                const response = await fetch('https://api.github.com/repos/malnossi/wassel/releases/latest');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('app-version').innerText = `الإصدار الأحدث: ${data.tag_name}`;
+                } else {
+                    document.getElementById('app-version').innerText = 'الإصدار الأحدث: v1.0.0';
+                }
+            } catch (e) {
+                document.getElementById('app-version').innerText = 'الإصدار الأحدث: v1.0.0';
+            }
+        }
+        fetchLatestRelease();
+    </script>
+</body>
+</html>

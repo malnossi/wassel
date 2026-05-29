@@ -1,0 +1,133 @@
+name: Build & Release واصل
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    name: Build macOS Universal App
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 11
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Build macOS App
+        run: wails build -platform darwin/universal
+
+      - name: Package Release
+        run: |
+          cd build/bin
+          zip -r ../../واصل-macOS.zip Wassel.app
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-release
+          path: واصل-macOS.zip
+
+  build-windows:
+    name: Build Windows Application
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 11
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Build Windows Executable
+        run: wails build
+
+      - name: Package Release
+        shell: pwsh
+        run: |
+          cd build/bin
+          Compress-Archive -Path Wassel.exe -DestinationPath ../../واصل-Windows.zip
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          path: واصل-Windows.zip
+
+  create-release:
+    name: Publish Github Release
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download macOS Build
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-release
+
+      - name: Download Windows Build
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-release
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            واصل-macOS.zip
+            واصل-Windows.zip
+          draft: false
+          prerelease: false
+          name: إصدار واصل ${{ github.ref_name }}
+          body: |
+            مرحباً بك في الإصدار الجديد من **واصل** (Wassel) للشبكات المحلية.
+
+            ### الأجهزة والملفات المدعومة:
+            * **نظام التشغيل macOS**: نسخة شاملة (Universal) لمعالجات Intel و Apple Silicon.
+            * **نظام التشغيل Windows**: ملف تنفيذي 64 بت.
+
+            للتنزيل، يرجى سحب أحد الملفات المضغوطة المرفقة أدناه.

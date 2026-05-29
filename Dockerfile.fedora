@@ -1,0 +1,22 @@
+FROM fedora:40
+
+# Install full development compiler stack and dependencies
+RUN dnf install -y \
+    gcc \
+    pkg-config \
+    make \
+    gtk3-devel \
+    webkit2gtk4.1-devel \
+    golang \
+    nodejs \
+    npm \
+    git \
+    && dnf clean all
+
+# Install package manager pnpm and exact Wails CLI v2.12.0
+RUN npm install -g pnpm && go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
+
+# Set environment PATH to access Wails and Go CLI
+ENV PATH="/root/go/bin:${PATH}"
+
+WORKDIR /app
