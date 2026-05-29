@@ -551,7 +551,7 @@
         <div class="hero-content">
             <div class="version-tag">
                 <span class="version-dot"></span>
-                <span id="app-version">جاري تحميل الإصدار...</span>
+                <span id="app-version">v 1.0.0(beta)</span>
             </div>
             <h2>شارك ملفاتك بلا قيود وبسرعة <span>فائقة</span></h2>
             <p>
@@ -708,23 +708,6 @@
         </div>
     </footer>
 
-    <!-- Fetch Latest Tag Script -->
-    <script>
-        async function fetchLatestRelease() {
-            try {
-                const response = await fetch('https://api.github.com/repos/malnossi/wassel/releases/latest');
-                if (response.ok) {
-                    const data = await response.json();
-                    document.getElementById('app-version').innerText = `الإصدار الأحدث: ${data.tag_name}`;
-                } else {
-                    document.getElementById('app-version').innerText = 'الإصدار الأحدث: v1.0.0';
-                }
-            } catch (e) {
-                document.getElementById('app-version').innerText = 'الإصدار الأحدث: v1.0.0';
-            }
-        }
-        fetchLatestRelease();
-    </script>
 </body>
 
 </html>

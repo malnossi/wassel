@@ -40,7 +40,7 @@ const { peers, resetDiscovery } = useDiscovery()
           <el-icon class="radar-icon"><Search /></el-icon>
         </div>
         <p class="radar-label">جاري البحث في الشبكة المحلية...</p>
-        <p class="radar-sublabel">تأكد من تشغيل تطبيق LocalShare على الأجهزة الأخرى</p>
+        <p class="radar-sublabel">تأكد من تشغيل تطبيق واصل على الأجهزة الأخرى</p>
       </div>
 
       <!-- Peers Grid -->
