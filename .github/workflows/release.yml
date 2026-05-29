@@ -44,13 +44,13 @@ jobs:
       - name: Package Release
         run: |
           cd build/bin
-          zip -r ../../واصل-macOS.zip Wassel.app
+          zip -r ../../macOS.zip Wassel.app
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: macos-release
-          path: واصل-macOS.zip
+          path: macOS.zip
 
   build-windows:
     name: Build Windows Application
@@ -85,13 +85,13 @@ jobs:
         shell: pwsh
         run: |
           cd build/bin
-          Compress-Archive -Path Wassel.exe -DestinationPath ../../واصل-Windows.zip
+          Compress-Archive -Path Wassel.exe -DestinationPath ../../Windows.zip
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-release
-          path: واصل-Windows.zip
+          path: Windows.zip
 
   create-release:
     name: Publish Github Release
@@ -118,8 +118,8 @@ jobs:
         # Removed the strict tag condition so it runs on main / dispatch too
         with:
           files: |
-            واصل-macOS.zip
-            واصل-Windows.zip
+            macOS.zip
+            Windows.zip
           draft: false
           prerelease: false
           # Fallback to 'latest' if it's not triggered by a tag

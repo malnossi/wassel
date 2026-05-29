@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="واصل (Wassel) - تطبيق مجاني ومفتوح المصدر لمشاركة الملفات بسرعة فائقة وأمان مطلق عبر الشبكة المحلية (LAN) دون الحاجة للإنترنت.">
+    <meta name="description"
+        content="واصل (Wassel) - تطبيق مجاني ومفتوح المصدر لمشاركة الملفات بسرعة فائقة وأمان مطلق عبر الشبكة المحلية (LAN) دون الحاجة للإنترنت.">
     <title>واصل - مشاركة فائقة السرعة للملفات عبر الشبكة المحلية</title>
-    
+
     <!-- Google Fonts: Readex Pro (Arabic) & Inter (Numbers/Latin) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Readex+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Readex+Pro:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
     <!-- Inline Premium Stylesheet for Single-File Portability -->
     <style>
         :root {
@@ -18,15 +22,15 @@
             --bg-glass: rgba(13, 20, 38, 0.45);
             --border-glass: rgba(255, 255, 255, 0.05);
             --border-glass-hover: rgba(0, 242, 254, 0.25);
-            
+
             --color-cyan: #00f2fe;
             --color-purple: #9b51e0;
             --color-success: #10b981;
-            
+
             --text-primary: #f3f4f6;
             --text-secondary: #9ca3af;
             --text-muted: #6b7280;
-            
+
             --font-main: 'Readex Pro', 'Inter', system-ui, -apple-system, sans-serif;
             --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -56,11 +60,13 @@
             opacity: 0.15;
             pointer-events: none;
         }
+
         .glow-cyan {
             top: -10vw;
             right: -10vw;
             background: var(--color-cyan);
         }
+
         .glow-purple {
             bottom: -10vw;
             left: -10vw;
@@ -76,6 +82,7 @@
             border-radius: 20px;
             transition: var(--transition-smooth);
         }
+
         .glass-panel:hover {
             border-color: var(--border-glass-hover);
             box-shadow: 0 10px 30px rgba(0, 242, 254, 0.04);
@@ -90,7 +97,7 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-        
+
         .brand {
             display: flex;
             align-items: center;
@@ -118,7 +125,7 @@
             font-weight: 700;
             letter-spacing: -0.5px;
         }
-        
+
         .brand-accent {
             color: var(--color-cyan);
             text-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
@@ -202,8 +209,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
         }
 
         .hero-content h2 {
@@ -285,11 +299,11 @@
             height: 480px;
             border-radius: 32px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 242, 254, 0.1);
-            object-fit: cover;
+            object-fit: contain;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition-smooth);
         }
-        
+
         .hero-image img:hover {
             transform: translateY(-5px) rotate(1deg);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(0, 242, 254, 0.2);
@@ -503,6 +517,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Background Gradients -->
@@ -515,13 +530,16 @@
             <div class="brand-logo">و</div>
             <h1>وا<span class="brand-accent">صل</span></h1>
         </a>
-        
+
         <ul class="nav-links">
             <li><a href="#features">المميزات</a></li>
             <li><a href="#download">التنزيل</a></li>
             <li>
                 <a href="https://github.com/malnossi/wassel" target="_blank" class="github-btn">
-                    <svg class="icon-svg" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    <svg class="icon-svg" viewBox="0 0 16 16">
+                        <path
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                    </svg>
                     <span>كود المصدر</span>
                 </a>
             </li>
@@ -537,14 +555,16 @@
             </div>
             <h2>شارك ملفاتك بلا قيود وبسرعة <span>فائقة</span></h2>
             <p>
-                <strong>واصل (Wassel)</strong> هو تطبيق سطح مكتب مجاني ومفتوح المصدر، يتيح لك إرسال واستقبال الملفات والمجلدات بين أجهزتك المختلفة على نفس الشبكة المحلية بسرعة البرق وأمان تام، ودون الحاجة لاتصال بالإنترنت مطلقاً.
+                <strong>واصل (Wassel)</strong> هو تطبيق سطح مكتب مجاني ومفتوح المصدر، يتيح لك إرسال واستقبال الملفات
+                والمجلدات بين أجهزتك المختلفة على نفس الشبكة المحلية بسرعة البرق وأمان تام، ودون الحاجة لاتصال بالإنترنت
+                مطلقاً.
             </p>
             <div class="hero-actions">
                 <a href="#download" class="btn btn-primary">تحميل التطبيق الآن</a>
                 <a href="#features" class="btn btn-secondary">استكشف المزايا</a>
             </div>
         </div>
-        
+
         <div class="hero-image">
             <img src="hero.png" alt="واصل - واجهة التطبيق الذكية لتبادل الملفات">
         </div>
@@ -556,33 +576,50 @@
             <h3>لماذا تختار واصل؟</h3>
             <p>صُمم التطبيق ليوفر تجربة نقل سريعة وخاصة دون أي تعقيد أو إعلانات.</p>
         </div>
-        
+
         <div class="features-grid">
             <!-- Feature 1 -->
             <div class="feature-card glass-panel">
                 <div class="feature-icon">
-                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
                 </div>
                 <h4>أمان وخصوصية تامة</h4>
-                <p>تنتقل ملفاتك بالكامل داخل شبكتك المنزلية أو المكتبية. يتم التحقق من سلامة وصحة الملفات عبر بصمة SHA-256 لمنع أي تلاعب بالبيانات.</p>
+                <p>تنتقل ملفاتك بالكامل داخل شبكتك المنزلية أو المكتبية. يتم التحقق من سلامة وصحة الملفات عبر بصمة
+                    SHA-256 لمنع أي تلاعب بالبيانات.</p>
             </div>
-            
+
             <!-- Feature 2 -->
             <div class="feature-card glass-panel">
                 <div class="feature-icon">
-                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
                 </div>
                 <h4>سرعة نقل خارقة</h4>
-                <p>لا قيود ولا خنق للسرعة! يستغل واصل كامل سرعة شبكة الواي فاي أو السلك الخاصة بك لنقل الجيجابايتات في ثوانٍ معدودة.</p>
+                <p>لا قيود ولا خنق للسرعة! يستغل واصل كامل سرعة شبكة الواي فاي أو السلك الخاصة بك لنقل الجيجابايتات في
+                    ثوانٍ معدودة.</p>
             </div>
-            
+
             <!-- Feature 3 -->
             <div class="feature-card glass-panel">
                 <div class="feature-icon">
-                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="22" y1="12" x2="18" y2="12"></line>
+                        <line x1="6" y1="12" x2="2" y2="12"></line>
+                        <line x1="12" y1="6" x2="12" y2="2"></line>
+                        <line x1="12" y1="22" x2="12" y2="18"></line>
+                    </svg>
                 </div>
                 <h4>اكتشاف ذكي وتلقائي</h4>
-                <p>بمجرد تشغيل التطبيق، سيكتشف الأجهزة الأخرى تلقائياً بفضل بروتوكول mDNS. وفي حال حظره، يعمل فاحص الشبكة الفرعية كبديل ذكي وفوري.</p>
+                <p>بمجرد تشغيل التطبيق، سيكتشف الأجهزة الأخرى تلقائياً بفضل بروتوكول mDNS. وفي حال حظره، يعمل فاحص
+                    الشبكة الفرعية كبديل ذكي وفوري.</p>
             </div>
         </div>
     </section>
@@ -593,15 +630,27 @@
             <h3>تنزيل واصل</h3>
             <p>اختر نظام التشغيل الخاص بك وحمل أحدث نسخة مباشرة من إصدارات GitHub الرسمية.</p>
         </div>
-        
+
         <div class="downloads-grid">
             <!-- macOS Card -->
             <div class="download-card glass-panel">
-                <div class="os-icon">🍏</div>
+                <div class="os-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="200" height="200" viewBox="0 0 50 50"
+                        style="fill:#FFFFFF;">
+                        <path
+                            d="M 44.527344 34.75 C 43.449219 37.144531 42.929688 38.214844 41.542969 40.328125 C 39.601563 43.28125 36.863281 46.96875 33.480469 46.992188 C 30.46875 47.019531 29.691406 45.027344 25.601563 45.0625 C 21.515625 45.082031 20.664063 47.03125 17.648438 47 C 14.261719 46.96875 11.671875 43.648438 9.730469 40.699219 C 4.300781 32.429688 3.726563 22.734375 7.082031 17.578125 C 9.457031 13.921875 13.210938 11.773438 16.738281 11.773438 C 20.332031 11.773438 22.589844 13.746094 25.558594 13.746094 C 28.441406 13.746094 30.195313 11.769531 34.351563 11.769531 C 37.492188 11.769531 40.8125 13.480469 43.1875 16.433594 C 35.421875 20.691406 36.683594 31.78125 44.527344 34.75 Z M 31.195313 8.46875 C 32.707031 6.527344 33.855469 3.789063 33.4375 1 C 30.972656 1.167969 28.089844 2.742188 26.40625 4.78125 C 24.878906 6.640625 23.613281 9.398438 24.105469 12.066406 C 26.796875 12.152344 29.582031 10.546875 31.195313 8.46875 Z">
+                        </path>
+                    </svg>
+                </div>
                 <h4>واصل لنظام macOS</h4>
                 <p>نسخة شاملة (Universal) تدعم معالجات Apple Silicon (M1/M2/M3) ومعالجات Intel.</p>
-                <a href="https://github.com/malnossi/wassel/releases/latest/download/واصل-macOS.zip" class="btn btn-primary">
-                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <a href="https://github.com/malnossi/wassel/releases/download/latest/macOS.zip" class="btn btn-primary">
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
                     <span>تحميل لنظام macOS</span>
                 </a>
                 <div class="download-meta">
@@ -609,14 +658,35 @@
                     <span>النظام: <strong>macOS 10.15 أو أحدث</strong></span>
                 </div>
             </div>
-            
+
             <!-- Windows Card -->
             <div class="download-card glass-panel card-purple">
-                <div class="os-icon">🪟</div>
+                <div class="os-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="200" height="200"
+                        viewBox="0,0,256,256">
+                        <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
+                            stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0"
+                            font-family="none" font-weight="none" font-size="none" text-anchor="none"
+                            style="mix-blend-mode: normal">
+                            <g transform="scale(5.12,5.12)">
+                                <path
+                                    d="M18.65234,3.04492c-4.27255,0.0353 -7.05641,1.98594 -7.23828,2.11719c-0.195,0.141 -0.33267,0.34803 -0.38867,0.58203l-3.23828,13.77344c-0.079,0.339 0.02348,0.69445 0.27148,0.93945c0.248,0.245 0.60636,0.34372 0.94336,0.26172c3.408,-1.077 8.57967,-1.22872 13.88867,1.73828c0.15,0.084 0.31733,0.12695 0.48633,0.12695c0.134,0 0.26853,-0.02608 0.39453,-0.08008c0.285,-0.123 0.49822,-0.37283 0.57422,-0.67383l3.79688,-14.88281c0.107,-0.418 -0.06569,-0.85784 -0.42969,-1.08984c-3.39675,-2.16563 -6.49702,-2.83368 -9.06055,-2.8125zM30.76563,8.19922c-0.15575,-0.016 -0.31339,0.00545 -0.46289,0.06445c-0.301,0.117 -0.52647,0.37059 -0.60547,0.68359l-3.77344,14.79297c-0.102,0.398 0.05077,0.81859 0.38477,1.05859c3.431,2.466 6.89813,3.20117 9.82813,3.20117c2.842,0 5.17838,-0.69045 6.48438,-1.18945c0.31,-0.118 0.54119,-0.38208 0.61719,-0.70508l3.73438,-15.87695c0.095,-0.405 -0.07102,-0.82559 -0.41602,-1.05859c-0.345,-0.231 -0.80062,-0.22542 -1.14062,0.01758c-0.252,0.179 -6.19108,4.46497 -14.20508,-0.83203c-0.1355,-0.088 -0.28956,-0.14025 -0.44531,-0.15625zM13.60352,22.02539c-2.757,0.07013 -5.01031,0.81742 -6.25781,1.29492c-0.311,0.118 -0.54119,0.38208 -0.61719,0.70508l-3.70312,15.74609c-0.017,0.075 -0.02539,0.19644 -0.02539,0.27344c0,0.374 0.20997,0.71472 0.54297,0.88672c0.329,0.17 1.03906,-0.07422 1.03906,-0.07422c0,0 5.87237,-4.35784 13.48437,0.41016c0.156,0.092 0.33081,0.13867 0.50781,0.13867c0.13,0 0.26177,-0.02417 0.38477,-0.07617c0.291,-0.121 0.50894,-0.37078 0.58594,-0.67578l3.76758,-14.77344c0.106,-0.419 -0.06573,-0.85684 -0.42773,-1.08984c-3.2625,-2.229 -6.52425,-2.83575 -9.28125,-2.76562zM25.93164,27.08398c-0.15413,-0.013 -0.31148,0.01081 -0.45898,0.07031c-0.295,0.12 -0.51575,0.37169 -0.59375,0.67969l-3.77148,14.7832c-0.104,0.403 0.05548,0.82741 0.39648,1.06641c3.695,2.582 7.08261,3.31641 9.72461,3.31641c0.862,0 1.64598,-0.08517 2.33398,-0.20117c3.058,-0.514 4.94639,-1.86292 5.02539,-1.91992c0.211,-0.153 0.35248,-0.42726 0.39648,-0.69727l3.19336,-13.56836c0.079,-0.339 -0.02248,-0.69445 -0.27148,-0.93945c-0.249,-0.245 -0.60641,-0.34472 -0.94141,-0.26172c-5.108,1.265 -10.17975,0.53936 -14.59375,-2.18164c-0.135,-0.0835 -0.28533,-0.13349 -0.43945,-0.14648z">
+                                </path>
+                            </g>
+                        </g>
+                    </svg>
+                </div>
                 <h4>واصل لنظام Windows</h4>
                 <p>ملف تنفيذي مستقل 64 بت خفيف وسريع ولا يحتاج لأي تثبيت معقد.</p>
-                <a href="https://github.com/malnossi/wassel/releases/latest/download/واصل-Windows.zip" class="btn btn-primary" style="background: linear-gradient(135deg, var(--color-purple), #b37feb); box-shadow: 0 4px 20px rgba(155, 81, 224, 0.3); color: #fff;">
-                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <a href="https://github.com/malnossi/wassel/releases/download/latest/Windows.zip"
+                    class="btn btn-primary"
+                    style="background: linear-gradient(135deg, var(--color-purple), #b37feb); box-shadow: 0 4px 20px rgba(155, 81, 224, 0.3); color: #fff;">
+                    <svg class="icon-svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
                     <span>تحميل لنظام Windows</span>
                 </a>
                 <div class="download-meta">
@@ -656,4 +726,5 @@
         fetchLatestRelease();
     </script>
 </body>
+
 </html>
