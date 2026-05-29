@@ -115,14 +115,18 @@ jobs:
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+        # Removed the strict tag condition so it runs on main / dispatch too
         with:
           files: |
             واصل-macOS.zip
             واصل-Windows.zip
           draft: false
           prerelease: false
-          name: إصدار واصل ${{ github.ref_name }}
+          # Fallback to 'latest' if it's not triggered by a tag
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'latest' }}
+          name: ${{ startsWith(github.ref, 'refs/tags/') && format('إصدار واصل {0}', github.ref_name) || 'إصدار واصل التجريبي (Latest)' }}
+          # This ensures it overwrites the 'latest' release rather than failing
+          make_latest: true
           body: |
             مرحباً بك في الإصدار الجديد من **واصل** (Wassel) للشبكات المحلية.
 
