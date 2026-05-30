@@ -109,7 +109,6 @@ func (a *App) SelectAndSendFile(peerIP string) string {
 		runtime.EventsEmit(a.ctx, "transfer:error", map[string]interface{}{
 			"message": "Cannot reach peer: " + err.Error(),
 		})
-		a.discoveryManager.RemovePeer(peerIP)
 		return ""
 	}
 
@@ -127,16 +126,8 @@ func (a *App) SelectAndSendFile(peerIP string) string {
 		})
 	}
 
-	var transferMu sync.Mutex
-	transferring := false
 
 	session.OnStatus = func(status string, err error) {
-		transferMu.Lock()
-		if status == transfer.StatusTransferring {
-			transferring = true
-		}
-		isTransferring := transferring
-		transferMu.Unlock()
 
 		errMsg := ""
 		if err != nil {
@@ -150,10 +141,6 @@ func (a *App) SelectAndSendFile(peerIP string) string {
 			"status":     status,
 			"error":      errMsg,
 		})
-
-		if status == transfer.StatusFailed && !isTransferring {
-			a.discoveryManager.RemovePeer(peerIP)
-		}
 
 		if status == transfer.StatusCompleted || status == transfer.StatusFailed || status == transfer.StatusDeclined || status == transfer.StatusCancelled {
 			a.transferManager.RemoveSender(transferID)
@@ -178,7 +165,6 @@ func (a *App) SelectAndSendFile(peerIP string) string {
 		runtime.EventsEmit(a.ctx, "transfer:error", map[string]interface{}{
 			"message": "Failed to start transfer: " + err.Error(),
 		})
-		a.discoveryManager.RemovePeer(peerIP)
 		return ""
 	}
 

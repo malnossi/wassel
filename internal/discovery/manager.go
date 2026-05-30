@@ -117,7 +117,7 @@ func (m *Manager) Shutdown() {
 
 // startBackgroundScheduler runs periodic active mDNS queries and stale peer sweeps.
 func (m *Manager) startBackgroundScheduler(ctx context.Context) {
-	queryTicker := time.NewTicker(15 * time.Second)
+	queryTicker := time.NewTicker(10 * time.Second)
 	defer queryTicker.Stop()
 
 	sweepTicker := time.NewTicker(10 * time.Second)
@@ -136,7 +136,7 @@ func (m *Manager) startBackgroundScheduler(ctx context.Context) {
 }
 
 func (m *Manager) sweepStalePeers() {
-	stale := m.store.SweepStale(60 * time.Second)
+	stale := m.store.SweepStale(120 * time.Second)
 	if m.onPeerLost != nil {
 		for _, peer := range stale {
 			log.Printf("Background sweeper evicted stale peer: %s (%s)\n", peer.Hostname, peer.IP)

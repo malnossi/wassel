@@ -137,17 +137,17 @@ func (s *MDNSService) processEntry(entry *zeroconf.ServiceEntry) {
 	// 2. Unescape DNS-SD instance name
 	instanceName := unescapeInstanceName(entry.Instance)
 
-	// 3. Filter self-discovery by IP (using cached lookup)
-	if platform.IsLocalIP(ip) {
-		return
-	}
-
-	// 4. Filter self-discovery by registered name
+	// 3. Filter self-discovery by registered name (fast check first)
 	s.regNameMu.RLock()
 	regName := s.registeredName
 	s.regNameMu.RUnlock()
 
 	if regName != "" && instanceName == regName {
+		return
+	}
+
+	// 4. Filter self-discovery by IP (using cached lookup)
+	if platform.IsLocalIP(ip) {
 		return
 	}
 

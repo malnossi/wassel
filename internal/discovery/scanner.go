@@ -111,12 +111,14 @@ func (s *Scanner) probeHost(ctx context.Context, targetIP string) {
 		if result.WasModified && s.onPeerFound != nil {
 			s.onPeerFound(result.Peer)
 		}
+		// Always refresh LastSeen even if Upsert didn't modify anything
+		s.store.Touch(targetIP)
 	}
 }
 
 // StartBackgroundScanner runs periodic subnet scans every 12 seconds.
 func (s *Scanner) StartBackgroundScanner(ctx context.Context) {
-	ticker := time.NewTicker(12 * time.Second)
+	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
 
 	// Initial sweep on startup

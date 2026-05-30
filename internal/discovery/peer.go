@@ -100,6 +100,18 @@ func (s *PeerStore) Clear() []Peer {
 	return evicted
 }
 
+// Touch updates the LastSeen timestamp for a peer by IP without checking for modifications.
+// Used by the scanner to keep peers alive even when their data hasn't changed.
+func (s *PeerStore) Touch(ip string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if peer, exists := s.peers[ip]; exists {
+		peer.LastSeen = time.Now()
+		s.peers[ip] = peer
+	}
+}
+
 // SweepStale removes peers not seen within the given TTL. Returns evicted peers.
 func (s *PeerStore) SweepStale(ttl time.Duration) []Peer {
 	s.mu.Lock()
