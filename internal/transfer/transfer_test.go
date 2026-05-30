@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"bytes"
+	"net"
 	"testing"
 	"time"
 )
@@ -46,47 +47,31 @@ func TestProgressWriterThrottling(t *testing.T) {
 	}
 }
 
-func TestReceiverURLValidation(t *testing.T) {
-	// 1. Test URL host matching peer IP (Should pass)
-	session, err := NewReceiverSession(
+func TestReceiverSessionCreation(t *testing.T) {
+	// Create a pipe to simulate a TCP connection
+	client, server := net.Pipe()
+	defer client.Close()
+	defer server.Close()
+
+	// Test session creation with valid params
+	session := NewReceiverSession(
 		"transfer-123",
-		"http://192.168.1.100:54321/download/transfer-123",
+		server,
 		"/tmp/testfile",
 		1000,
-		"192.168.1.100",
 		"some-checksum",
 	)
-	if err != nil {
-		t.Errorf("Expected session creation to succeed, got error: %v", err)
-	}
 	if session == nil {
 		t.Fatal("Expected session to be non-nil")
 	}
-
-	// 2. Test URL host mismatch (Injection attack check)
-	_, err2 := NewReceiverSession(
-		"transfer-123",
-		"http://evil-attacker.com/download/transfer-123",
-		"/tmp/testfile",
-		1000,
-		"192.168.1.100",
-		"some-checksum",
-	)
-	if err2 == nil {
-		t.Error("Expected session creation to fail due to mismatching download URL host")
+	if session.ID != "transfer-123" {
+		t.Errorf("Expected ID to be 'transfer-123', got '%s'", session.ID)
 	}
-
-	// 3. Test non-http scheme validation
-	_, err3 := NewReceiverSession(
-		"transfer-123",
-		"https://192.168.1.100:54321/download/transfer-123",
-		"/tmp/testfile",
-		1000,
-		"192.168.1.100",
-		"some-checksum",
-	)
-	if err3 == nil {
-		t.Error("Expected session creation to fail due to non-http scheme (https)")
+	if session.FileSize != 1000 {
+		t.Errorf("Expected FileSize to be 1000, got %d", session.FileSize)
+	}
+	if session.Checksum != "some-checksum" {
+		t.Errorf("Expected Checksum to be 'some-checksum', got '%s'", session.Checksum)
 	}
 }
 

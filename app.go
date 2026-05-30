@@ -10,7 +10,6 @@ import (
 
 	"localshare/internal/discovery"
 	"localshare/internal/identity"
-	"localshare/internal/platform"
 	"localshare/internal/transfer"
 
 	"github.com/google/uuid"
@@ -102,16 +101,6 @@ func (a *App) SelectAndSendFile(peerIP string) string {
 		return ""
 	}
 
-	// Dynamic IP routing discovery
-	localIP, err := platform.GetOutboundIP(peerIP)
-	if err != nil {
-		log.Println("Failed to detect outbound IP:", err)
-		runtime.EventsEmit(a.ctx, "transfer:error", map[string]interface{}{
-			"message": "Cannot reach peer: " + err.Error(),
-		})
-		return ""
-	}
-
 	peerName := a.discoveryManager.GetPeerName(peerIP)
 
 	session.OnProgress = func(current, total int64) {
@@ -126,9 +115,7 @@ func (a *App) SelectAndSendFile(peerIP string) string {
 		})
 	}
 
-
 	session.OnStatus = func(status string, err error) {
-
 		errMsg := ""
 		if err != nil {
 			errMsg = err.Error()
@@ -159,14 +146,7 @@ func (a *App) SelectAndSendFile(peerIP string) string {
 		"peerName":   peerName,
 	})
 
-	err = session.Start(a.ctx, localIP)
-	if err != nil {
-		log.Println("Failed to start sender session:", err)
-		runtime.EventsEmit(a.ctx, "transfer:error", map[string]interface{}{
-			"message": "Failed to start transfer: " + err.Error(),
-		})
-		return ""
-	}
+	session.Start(a.ctx)
 
 	return transferID
 }
@@ -203,24 +183,17 @@ func (a *App) AcceptTransfer(id string) bool {
 		handshake.conn.Close()
 		return false
 	}
-	handshake.conn.Close()
+	// NOTE: Do NOT close the connection here — the sender will stream the file
+	// directly over this same TCP connection. The ReceiverSession takes ownership.
 
-	// 3. Initiate download stream with security validations
-	session, err := transfer.NewReceiverSession(
+	// 3. Create receiver session — reads file data directly from the TCP connection
+	session := transfer.NewReceiverSession(
 		id,
-		handshake.payload.DownloadURL,
+		handshake.conn,
 		savePath,
 		handshake.payload.Size,
-		handshake.peerIP,          // For URL host validation
-		handshake.payload.Checksum, // For integrity verification
+		handshake.payload.Checksum,
 	)
-	if err != nil {
-		log.Println("Failed to create receiver session:", err)
-		runtime.EventsEmit(a.ctx, "transfer:error", map[string]interface{}{
-			"message": "Security validation failed: " + err.Error(),
-		})
-		return false
-	}
 
 	session.OnProgress = func(current, total int64) {
 		percentage := float64(current) / float64(total) * 100

@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"net/http"
 	"os"
 	"path/filepath"
 	"sync"
@@ -16,6 +15,8 @@ import (
 )
 
 // SenderSession represents an active outbound file transfer.
+// It dials the receiver, performs the handshake, and streams the file
+// directly over the same TCP connection — no ephemeral HTTP server needed.
 type SenderSession struct {
 	ID         string
 	FilePath   string
@@ -24,12 +25,11 @@ type SenderSession struct {
 	Checksum   string // SHA-256 hex digest
 	TargetIP   string
 	TargetPort int
-	HTTPServer *http.Server
-	Listener   net.Listener
 	OnProgress func(current int64, total int64)
 	OnStatus   func(status string, err error)
 
 	cancel context.CancelFunc
+	conn   net.Conn
 	mu     sync.Mutex
 	done   bool
 }
@@ -58,98 +58,52 @@ func NewSenderSession(id, filePath, targetIP string, targetPort int) (*SenderSes
 	}, nil
 }
 
-// Start spins up the ephemeral HTTP server and executes the handshake.
-func (s *SenderSession) Start(ctx context.Context, localIP string) error {
+// Start begins the transfer in a background goroutine.
+func (s *SenderSession) Start(ctx context.Context) {
 	ctx, s.cancel = context.WithCancel(ctx)
 
-	// 1. Start ephemeral HTTP server on :0 (random open port)
-	var err error
-	s.Listener, err = net.Listen("tcp", ":0")
-	if err != nil {
-		return err
-	}
-	port := s.Listener.Addr().(*net.TCPAddr).Port
-
-	mux := http.NewServeMux()
-	mux.HandleFunc(fmt.Sprintf("/download/%s", s.ID), func(w http.ResponseWriter, r *http.Request) {
-		file, err := os.Open(s.FilePath)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			s.emitStatus(StatusFailed, err)
-			return
-		}
-		defer file.Close()
-
-		w.Header().Set("Content-Length", fmt.Sprintf("%d", s.FileSize))
-		w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q", s.FileName))
-		w.Header().Set("Content-Type", "application/octet-stream")
-
-		pw := NewProgressWriter(w, s.FileSize, 150*time.Millisecond, func(current, total int64) {
-			if s.OnProgress != nil {
-				s.OnProgress(current, total)
-			}
-		})
-
-		_, err = io.Copy(pw, file)
-		if err != nil {
-			s.emitStatus(StatusFailed, err)
-			return
-		}
-
-		s.emitStatus(StatusCompleted, nil)
-
-		// Self-shutdown server after serving, with delay for TCP buffer flush
-		go func() {
-			time.Sleep(1 * time.Second)
-			s.Stop()
-		}()
-	})
-
-	s.HTTPServer = &http.Server{Handler: mux}
-
 	go func() {
-		if err := s.HTTPServer.Serve(s.Listener); err != nil && err != http.ErrServerClosed {
+		err := s.performTransfer(ctx)
+		if err != nil {
 			s.emitStatus(StatusFailed, err)
 		}
 	}()
-
-	// 2. Perform the TCP Handshake in a background routine
-	go func() {
-		err := s.performHandshake(ctx, localIP, port)
-		if err != nil {
-			s.Stop()
-			s.emitStatus(StatusFailed, err)
-		}
-	}()
-
-	return nil
 }
 
-func (s *SenderSession) performHandshake(ctx context.Context, localIP string, httpPort int) error {
-	downloadURL := fmt.Sprintf("http://%s:%d/download/%s", localIP, httpPort, s.ID)
-
-	// Dial recipient control TCP port with context awareness
+func (s *SenderSession) performTransfer(ctx context.Context) error {
+	// 1. Dial recipient control TCP port
 	dialer := net.Dialer{Timeout: 5 * time.Second}
 	conn, err := dialer.DialContext(ctx, "tcp", fmt.Sprintf("%s:%d", s.TargetIP, s.TargetPort))
 	if err != nil {
-		return fmt.Errorf("failed to connect to peer control channel: %w", err)
+		return fmt.Errorf("failed to connect to peer: %w", err)
 	}
-	defer conn.Close()
 
+	// Store conn for cancellation support
+	s.mu.Lock()
+	s.conn = conn
+	s.mu.Unlock()
+
+	defer func() {
+		conn.Close()
+		s.mu.Lock()
+		s.conn = nil
+		s.mu.Unlock()
+	}()
+
+	// 2. Send handshake metadata
 	payload := HandshakePayload{
-		ID:          s.ID,
-		Filename:    s.FileName,
-		Size:        s.FileSize,
-		DownloadURL: downloadURL,
-		Checksum:    s.Checksum,
+		ID:       s.ID,
+		Filename: s.FileName,
+		Size:     s.FileSize,
+		Checksum: s.Checksum,
 	}
 
-	// Write Handshake Payload JSON
+	conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
 	if err := json.NewEncoder(conn).Encode(payload); err != nil {
 		return fmt.Errorf("failed to send handshake metadata: %w", err)
 	}
 
-	// Wait up to 60s for approval response
+	// 3. Wait for approval response (up to 60s for user interaction)
 	conn.SetReadDeadline(time.Now().Add(60 * time.Second))
 	var resp HandshakeResponse
 	if err := json.NewDecoder(conn).Decode(&resp); err != nil {
@@ -161,11 +115,35 @@ func (s *SenderSession) performHandshake(ctx context.Context, localIP string, ht
 		return nil
 	}
 
+	// 4. Stream file directly over the same TCP connection
 	s.emitStatus(StatusTransferring, nil)
+
+	// Clear all deadlines for the bulk transfer
+	conn.SetReadDeadline(time.Time{})
+	conn.SetWriteDeadline(time.Time{})
+
+	file, err := os.Open(s.FilePath)
+	if err != nil {
+		return fmt.Errorf("failed to open file: %w", err)
+	}
+	defer file.Close()
+
+	pw := NewProgressWriter(conn, s.FileSize, 150*time.Millisecond, func(current, total int64) {
+		if s.OnProgress != nil {
+			s.OnProgress(current, total)
+		}
+	})
+
+	_, err = io.Copy(pw, file)
+	if err != nil {
+		return fmt.Errorf("failed to stream file: %w", err)
+	}
+
+	s.emitStatus(StatusCompleted, nil)
 	return nil
 }
 
-// Stop gracefully shuts down the HTTP server and cancels the session.
+// Stop gracefully cancels the transfer and closes the connection.
 func (s *SenderSession) Stop() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -178,17 +156,19 @@ func (s *SenderSession) Stop() {
 	if s.cancel != nil {
 		s.cancel()
 	}
-	if s.HTTPServer != nil {
-		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-		defer cancel()
-		s.HTTPServer.Shutdown(ctx)
-	}
-	if s.Listener != nil {
-		s.Listener.Close()
+	if s.conn != nil {
+		s.conn.Close()
 	}
 }
 
 func (s *SenderSession) emitStatus(status string, err error) {
+	s.mu.Lock()
+	if s.done {
+		s.mu.Unlock()
+		return
+	}
+	s.mu.Unlock()
+
 	if s.OnStatus != nil {
 		s.OnStatus(status, err)
 	}
